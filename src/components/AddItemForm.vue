@@ -18,7 +18,7 @@
             <textarea v-model="description"></textarea>
         </div>
         <div class="add-item-form__submit">
-            <button type="button" @click="addNewItem">
+            <button type="button" @click="editOrAddItem">
                 <img src="../assets/send.svg" alt="add item icon">
             </button>
         </div>
@@ -28,24 +28,35 @@
 <script>
 export default {
     name: 'ListItem',
+    props: {
+        selectedItem: [Boolean, Object],
+        listItems: Array
+    },
     data() {
         return {
-            name: "",
-            price : "",
-            description: ""
+            name: this.selectedItem ? this.selectedItem.name : "",
+            price : this.selectedItem ? this.selectedItem.price : "",
+            description: this.selectedItem ? this.selectedItem.description : ""
         }
     },
     methods: {
-        addNewItem() {
-            this.$emit('addNewItem', {
+        editOrAddItem() {
+            const itemData = {
                 name: this.name,
                 price: this.price,
-                description: this.description,
-                done: false
-            });
+                description: this.description
+            };
+            if (this.selectedItem) {
+                const index = this.listItems.indexOf(this.selectedItem)
+                itemData.done = this.selectedItem.done;
+                this.$emit('editOrAddItem', itemData, index);
+            } else {
+                itemData.done = false;
+                this.$emit('editOrAddItem', itemData, false);
+            }
             this.$emit('toggleItemForm', false);
         }
-    }
+    },
 }
 </script>
 

@@ -6,10 +6,11 @@
       :currency="currency" 
       :listItems="listItems" 
       :isAddingItem="isAddingItem" 
+      :selectedItem="selectedItem"
       @toggleItemForm="toggleItemForm" 
       @toggleItemStatus="toggleItemStatus" 
       @deleteItem="deleteItem" 
-      @addNewItem="addItem"
+      @editOrAddItem="editOrAddItem"
       @showItemDescription="showItemDescription"
     />
     <ItemDescription 
@@ -41,33 +42,37 @@ export default {
         {
           name: "Tomatos",
           price: 5,
-          description: "This is a description about tomatos",
+          description: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatum odit animi ipsam minima incidunt quos tempora quibusdam est aliquid saepe natus odio, mollitia voluptate eum officiis aperiam corporis nam vero. tomatos",
           done: true
         },
         {
           name: "Cucumbers",
           price: 3,
-          description: "This is a description about cucumbers",
+          description: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatum odit animi ipsam minima incidunt quos tempora quibusdam est aliquid saepe natus odio, mollitia voluptate eum officiis aperiam corporis nam vero. cucumbers",
           done: false
         },
         {
           name: "Bread",
           price: 10,
-          description: "This is a description about bread",
+          description: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatum odit animi ipsam minima incidunt quos tempora quibusdam est aliquid saepe natus odio, mollitia voluptate eum officiis aperiam corporis nam vero. bread",
           done: false
         },
         {
           name: "Grapes",
           price: 4,
-          description: "This is a description about grapes",
+          description: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatum odit animi ipsam minima incidunt quos tempora quibusdam est aliquid saepe natus odio, mollitia voluptate eum officiis aperiam corporis nam vero. grapes",
           done: false
         }
       ]
     }
   },
   methods: {
-    addItem(item) {
-      this.listItems.push(item);
+    editOrAddItem(item, index) {
+      if (Number.isInteger(index)) {
+        this.listItems[index] = item;
+      } else {
+        this.listItems.push(item);
+      }
     },  
     deleteItem(index) {
       this.listItems.splice(index, 1);
@@ -75,10 +80,14 @@ export default {
     toggleItemStatus(index) {
       this.listItems[index].done = !this.listItems[index].done;
     },
-    toggleItemForm(isOpen) {
+    toggleItemForm(isOpen, index) {
+      if (Number.isInteger(index)) {
+        this.selectedItem = this.listItems[index];
+      }
       if (isOpen) {
         return this.isAddingItem = true;
       }
+      this.selectedItem = false;
       return this.isAddingItem = false;
     },
     showItemDescription(index) {

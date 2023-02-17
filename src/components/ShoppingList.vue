@@ -13,7 +13,8 @@
           @deleteItem="deleteItem"
           @toggleItemStatus="toggleItemStatus"
           @showItemDescription="showItemDescription"
-          >
+          @toggleItemForm="toggleItemForm"
+        >
         </ListItem>
         <ListItem :isTotal="true" :price="totalPrice" :currency="currency"></ListItem>
     </ul>
@@ -25,7 +26,13 @@
         add product
       </span>
     </button>
-    <AddItemForm v-if="isAddingItem" @toggleItemForm="toggleItemForm" @addNewItem="addNewItem" />
+    <AddItemForm 
+      v-if="isAddingItem"
+      :selectedItem="selectedItem"
+      :listItems="listItems"
+      @toggleItemForm="toggleItemForm" 
+      @editOrAddItem="editOrAddItem" 
+    />
   </div>
 </template>
 
@@ -37,18 +44,14 @@ export default {
   name: 'ShoppingList',
   components: {
     ListItem,
-    AddItemForm
+    AddItemForm,
   },
   props: {
     title: String,
     currency: String,
     listItems: Array,
-    isAddingItem: Boolean
-  },
-  data() {
-    return {
-      
-    }
+    isAddingItem: Boolean,
+    selectedItem: [Boolean, Object]
   },
   methods: {
     addItem(item) {
@@ -60,20 +63,19 @@ export default {
     toggleItemStatus(index) {
       this.$emit('toggleItemStatus', index);
     },
-    toggleItemForm(isOpen) {
-      this.$emit('toggleItemForm', isOpen);
+    toggleItemForm(isOpen, index) {
+      this.$emit('toggleItemForm', isOpen, index);
     },
-    addNewItem(item) {
-      this.$emit('addNewItem', item);
+    editOrAddItem(item, index) {
+      this.$emit('editOrAddItem', item, index);
     },
     showItemDescription(index) {
       this.$emit('showItemDescription', index);
-      
     }
   },
   computed: {
     totalPrice() {
-      return this.listItems.reduce((acc, item) => acc + item.price, 0);
+      return this.listItems.reduce((acc, item) => acc + parseInt(item.price), 0);
     }
   },
   mounted() {

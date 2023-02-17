@@ -12,7 +12,7 @@
             </div>
         </button>
         <div v-if="!isTotal" class="shopping-list-item__buttons">
-            <button class="shopping-list-item__button">
+            <button class="shopping-list-item__button" @click="$emit('toggleItemForm', true, index)">
                     <img src="../assets/pencil.svg" alt="edit list item icon">
             </button>
             <button class="shopping-list-item__button">
@@ -65,6 +65,7 @@ export default {
         &:last-child {
             box-shadow: none;
             & .shopping-list-item__index {
+                cursor: none;
                 box-shadow: none;
             }
         }
@@ -128,6 +129,5 @@ export default {
             }
         }
     }
-
 }
 </style>
